@@ -1,0 +1,34 @@
+name: Diagnostic npm (temporaire)
+
+# Workflow jetable : interroge NPM_TOKEN pour comprendre pourquoi la
+# publication renvoie 404. N'affiche jamais le token lui-même.
+# À supprimer une fois le diagnostic fait.
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: À qui appartient le token ?
+        continue-on-error: true
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: L'organisation crocweb existe-t-elle et le token la voit-il ?
+        continue-on-error: true
+        run: npm org ls crocweb
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Quels paquets le token peut-il écrire ?
+        continue-on-error: true
+        run: npm access list packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
