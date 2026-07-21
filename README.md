@@ -17,10 +17,10 @@ Moteur de migrations Appwrite **versionnées, forward-only et idempotentes**.
 pnpm add -D github:Crocweb/appwrite-migrations#semver:^1.0.0
 ```
 
-> Ce dépôt est **privé** : l'installation suppose un accès GitHub à l'org
-> Crocweb (clé SSH ou token). Une image Docker ou une CI qui installe ce paquet
-> doit donc recevoir de quoi s'authentifier — ou n'installer que les
-> dépendances de production, ce paquet étant une devDependency.
+> Dépôt **public** : pnpm récupère une archive `codeload.github.com`, sans git
+> ni authentification. Une image Docker ou une CI qui installe ce paquet n'a donc
+> besoin d'aucun secret — vérifié sur le build de `www-photographe`
+> (`node:24-alpine`, Dockerfile inchangé).
 
 > `dist/` est **versionné**, et le paquet n'a volontairement pas de script
 > `prepare` : l'installation ne déclenche donc aucun build. C'est délibéré —
