@@ -22,6 +22,13 @@ pnpm add -D github:Crocweb/appwrite-migrations#semver:^1.0.0
 > doit donc recevoir de quoi s'authentifier — ou n'installer que les
 > dépendances de production, ce paquet étant une devDependency.
 
+> `dist/` est **versionné**, et le paquet n'a volontairement pas de script
+> `prepare` : l'installation ne déclenche donc aucun build. C'est délibéré —
+> pnpm 11 exige d'autoriser les scripts de build d'une dépendance git par une
+> entrée `allowBuilds` **contenant le SHA du commit**, qu'il faudrait mettre à
+> jour chez chaque consommateur à chaque version. La CI vérifie qu'un rebuild
+> ne modifie pas `dist/`.
+
 `node-appwrite` (>= 22) est une **peerDependency** : c'est votre projet qui le
 fournit, donc il n'y en a qu'une copie.
 
