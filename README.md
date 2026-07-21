@@ -13,28 +13,21 @@ Moteur de migrations Appwrite **versionnées, forward-only et idempotentes**.
 
 ## Installation
 
-Le paquet est publié sur **GitHub Packages**, pas sur npmjs.com. Deux lignes
-dans le `.npmrc` du projet consommateur :
-
-```ini
-@crocweb:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
-```
-
 ```bash
 pnpm add -D @crocweb/appwrite-migrations
 ```
 
-> ⚠️ **GitHub Packages exige un token même en lecture**, y compris pour un paquet
-> issu d'un dépôt public. Il faut donc un PAT avec le scope `read:packages`,
-> exposé en `NODE_AUTH_TOKEN` — chez les développeurs, en CI, et dans le build
-> Docker (via `--mount=type=secret`, jamais en `COPY`). Le `.npmrc` ci-dessus ne
-> contient pas le token lui-même : il le lit dans l'environnement, ce qui le rend
-> committable.
+Paquet **public sur npmjs.com** : aucun `.npmrc`, aucun token, ni chez les
+développeurs, ni en CI, ni dans un build Docker.
 
-**Publication** : elle est déclenchée par un tag `vX.Y.Z` et faite par GitHub
-Actions avec le `GITHUB_TOKEN` automatique — aucun token personnel n'intervient.
-`dist/` n'est pas versionné : `prepublishOnly` le compile au moment de publier.
+**Publication** : déclenchée par un tag `vX.Y.Z`, faite par GitHub Actions avec
+`--provenance` — npm affiche alors le lien vérifié entre la version publiée et le
+commit qui l'a produite. `dist/` n'est pas versionné : `prepublishOnly` le compile
+au moment de publier.
+
+> Les versions `1.0.x` avaient été publiées sur GitHub Packages, qui exige un
+> token même en lecture. Elles y restent (dépréciées) pour ne casser aucun
+> lockfile existant, mais npmjs est désormais le seul registre de publication.
 
 `node-appwrite` (>= 22) est une **peerDependency** : c'est votre projet qui le
 fournit, donc il n'y en a qu'une copie.

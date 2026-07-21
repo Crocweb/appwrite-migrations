@@ -1,7 +1,7 @@
 name: Publier
 
-# Publie sur GitHub Packages à chaque tag vX.Y.Z. Le tag est la seule
-# commande de publication : rien ne se publie depuis un poste.
+# Publie sur npmjs.com à chaque tag vX.Y.Z. Le tag est la seule commande de
+# publication : rien ne se publie depuis un poste.
 on:
   push:
     tags: ['v*']
@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Suffit à publier : aucun token personnel n'est nécessaire.
-      packages: write
+      # Provenance npm : signe le lien entre le paquet publié et le commit qui
+      # l'a produit. Ne fonctionne que depuis un dépôt public.
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -22,8 +23,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-          registry-url: https://npm.pkg.github.com
-          scope: '@crocweb'
+          registry-url: https://registry.npmjs.org
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
@@ -41,6 +41,6 @@ jobs:
           fi
 
       # prepublishOnly compile dist/ — il n'est plus versionné.
-      - run: pnpm publish --no-git-checks
+      - run: pnpm publish --provenance --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
