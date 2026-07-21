@@ -1,0 +1,30 @@
+{
+  "name": "@crocweb/appwrite-migrations",
+  "version": "1.0.0",
+  "description": "Moteur de migrations Appwrite versionnées, forward-only et idempotent",
+  "license": "MIT",
+  "type": "module",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "vitest run",
+    "check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "node-appwrite": ">=22"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "node-appwrite": "^22.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.0"
+  }
+}

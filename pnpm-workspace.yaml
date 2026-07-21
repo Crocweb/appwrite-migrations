@@ -1,0 +1,4 @@
+# esbuild est une dépendance de vitest et porte un script de build natif que
+# pnpm 11 bloque par défaut. Même convention que les autres projets Crocweb.
+allowBuilds:
+  esbuild: true
