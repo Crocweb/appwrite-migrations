@@ -80,3 +80,19 @@ export class MigrationFailedError extends Error {
     this.migrationId = migrationId;
   }
 }
+
+/**
+ * Configuration invalide : option obligatoire vide.
+ *
+ * Distincte de `MigrationFailedError` : rien n'a été tenté, aucun appel réseau
+ * n'a eu lieu, et l'appelant n'a pas à se demander si le schéma est partiel.
+ */
+export class MigrationConfigError extends Error {
+  readonly option: string;
+
+  constructor(option: string, message: string) {
+    super(message);
+    this.name = 'MigrationConfigError';
+    this.option = option;
+  }
+}

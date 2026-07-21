@@ -14,7 +14,10 @@ export type {
   MigrationLedger,
   RunMigrationsResult,
 } from './types.js';
-export { MigrationFailedError } from './types.js';
+export { MigrationConfigError, MigrationFailedError } from './types.js';
+
+export { migrate, migrateWith } from './migrate.js';
+export type { MigrateOptions, MigrateWithOptions, MigrationsTablesDb } from './migrate.js';
 
 export { runMigrations } from './engine.js';
 export { createMigrationContext, COLUMN_READY_TIMEOUT_MS } from './context.js';
