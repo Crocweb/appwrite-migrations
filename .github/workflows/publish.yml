@@ -1,0 +1,46 @@
+name: Publier
+
+# Publie sur GitHub Packages à chaque tag vX.Y.Z. Le tag est la seule
+# commande de publication : rien ne se publie depuis un poste.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Suffit à publier : aucun token personnel n'est nécessaire.
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@crocweb'
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm test
+
+      # Garde-fou : le tag doit correspondre à la version du package.json,
+      # sinon on publierait une version qui ne dit pas la vérité.
+      - name: Le tag doit correspondre à la version
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(node -p "require('./package.json').version")
+          if [ "$TAG" != "$PKG" ]; then
+            echo "tag $TAG ≠ package.json $PKG"
+            exit 1
+          fi
+
+      # prepublishOnly compile dist/ — il n'est plus versionné.
+      - run: pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

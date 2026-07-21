@@ -13,21 +13,28 @@ Moteur de migrations Appwrite **versionnées, forward-only et idempotentes**.
 
 ## Installation
 
-```bash
-pnpm add -D github:Crocweb/appwrite-migrations#semver:^1.0.0
+Le paquet est publié sur **GitHub Packages**, pas sur npmjs.com. Deux lignes
+dans le `.npmrc` du projet consommateur :
+
+```ini
+@crocweb:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
-> Dépôt **public** : pnpm récupère une archive `codeload.github.com`, sans git
-> ni authentification. Une image Docker ou une CI qui installe ce paquet n'a donc
-> besoin d'aucun secret — vérifié sur le build de `www-photographe`
-> (`node:24-alpine`, Dockerfile inchangé).
+```bash
+pnpm add -D @crocweb/appwrite-migrations
+```
 
-> `dist/` est **versionné**, et le paquet n'a volontairement pas de script
-> `prepare` : l'installation ne déclenche donc aucun build. C'est délibéré —
-> pnpm 11 exige d'autoriser les scripts de build d'une dépendance git par une
-> entrée `allowBuilds` **contenant le SHA du commit**, qu'il faudrait mettre à
-> jour chez chaque consommateur à chaque version. La CI vérifie qu'un rebuild
-> ne modifie pas `dist/`.
+> ⚠️ **GitHub Packages exige un token même en lecture**, y compris pour un paquet
+> issu d'un dépôt public. Il faut donc un PAT avec le scope `read:packages`,
+> exposé en `NODE_AUTH_TOKEN` — chez les développeurs, en CI, et dans le build
+> Docker (via `--mount=type=secret`, jamais en `COPY`). Le `.npmrc` ci-dessus ne
+> contient pas le token lui-même : il le lit dans l'environnement, ce qui le rend
+> committable.
+
+**Publication** : elle est déclenchée par un tag `vX.Y.Z` et faite par GitHub
+Actions avec le `GITHUB_TOKEN` automatique — aucun token personnel n'intervient.
+`dist/` n'est pas versionné : `prepublishOnly` le compile au moment de publier.
 
 `node-appwrite` (>= 22) est une **peerDependency** : c'est votre projet qui le
 fournit, donc il n'y en a qu'une copie.

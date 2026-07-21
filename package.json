@@ -1,9 +1,16 @@
 {
   "name": "@crocweb/appwrite-migrations",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Moteur de migrations Appwrite versionnées, forward-only et idempotent",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Crocweb/appwrite-migrations.git"
+  },
+  "homepage": "https://github.com/Crocweb/appwrite-migrations#readme",
+  "bugs": "https://github.com/Crocweb/appwrite-migrations/issues",
+  "keywords": ["appwrite", "migrations", "schema", "tablesdb"],
   "files": ["dist"],
   "exports": {
     ".": {
@@ -12,8 +19,12 @@
     },
     "./package.json": "./package.json"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "tsc",
     "test": "vitest run",
     "check": "tsc --noEmit"
   },
